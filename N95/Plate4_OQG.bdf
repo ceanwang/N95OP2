@@ -1,0 +1,73 @@
+$pyNastran: version=msc
+$pyNastran: punch=False
+$pyNastran: encoding=utf-8
+$pyNastran: nnodes=36
+$pyNastran: nelements=25
+$EXECUTIVE CONTROL DECK
+$
+ID Plate,N95
+SOL 1
+TIME 100
+ALTER 114
+$    DISPLACEMENT(SORT1,REAL,PLOT) = ALL
+$    SPCFORCES(SORT1,REAL,PLOT) = ALL
+$    STRESS(SORT1,REAL,VONMISES,BILIN,PLOT) = ALL
+$    DATA BLOCKS:-
+$    XXXX
+$    OUGV
+$    OQGV
+$    OES1
+$OUTPUT2    GEOM1,GEOM2,,,//-1/12/*NASA95*///       $
+OUTPUT2    OQG1,,,,//-1/12/*NASA95*///       $
+$OUTPUT2    OUGV1,OQG1,OES1,,//0/12/*NASA95*///       $
+$OUTPUT2 OPHIG,,,,//0/12/*NASA95*///         $
+OUTPUT2 ,,,,, //-9/12/ $
+ENDALTER
+CEND
+$CASE CONTROL DECK
+  MAXLINES=999999
+  ECHO = NONE
+  TITLE = PLATE
+  SUBTITLE = FreeCAD
+  LABEL = LARGE MESH
+  DISPLACEMENT  = ALL
+  OLOAD (PUNCH) = ALL
+  SPCFORCE = ALL
+  STRESS (PUNCH) = ALL
+  SPC  = 1
+SUBCASE 1
+  LABEL = STATIC CASE
+  LOAD = 1
+BEGIN BULK
+$PARAMS
+PARAM,AUTOSPC,1
+PARAM,GRDPNT,0
+PARAM       POST      -1
+$NODES
+GRID           1              0.      0.      0.
+GRID           2              5.      0.      0.
+GRID           3             10.      0.      0.
+GRID           4              0.      5.      0.
+GRID           5              5.      5.      0.
+GRID           6             10.      5.      0.
+GRID           7              0.     10.      0.
+GRID           8              5.     10.      0.
+GRID           9             10.     10.      0.
+$ELEMENTS
+CQUAD4         1       1       1       2       5       4
+CQUAD4         2       1       2       3       6       5
+CQUAD4         3       1       4       5       8       7
+CQUAD4         4       1       5       6       9       8
+$PROPERTIES
+PSHELL         1       1      .3       1               1
+$MATERIALS
+MAT1           1 210000.              .3
+$LOADS
+LOAD           1      1.      1.       2
+FORCE          2       3            100.      1.      0.      0.
+FORCE          2       6            100.      1.      0.      0.
+FORCE          2       9            100.      1.      0.      0.
+$SPCs
+SPCADD         1       2
+SPC1           2  123456       1       4      7
+ENDDATA
